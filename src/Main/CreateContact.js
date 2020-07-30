@@ -9,12 +9,11 @@ const CreateContact = ({ onCancelClick }) => {
     const [switchEmergency, setSwitchEmergency] = useState(false);
 
     const onFormFinish = values => {
-        console.log(values);
-        values["birthDay"] = values.birthDay.format("DD/MM/YYYY");
-
-        setContacts(prevContacts => [...prevContacts, values]);
+        setContacts(prevContacts => {
+            localStorage.setItem("contacts", JSON.stringify([...prevContacts, values]));
+            return [...prevContacts, values];
+        });
         message.success("Contact was successfully added");
-
         onCancelClick();
     };
 
@@ -49,7 +48,7 @@ const CreateContact = ({ onCancelClick }) => {
                 <Input />
             </Form.Item>
 
-            <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
+            {/* <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
                 <Select placeholder="Select a option and change input text above" allowClear>
                     <Option value="male">male</Option>
                     <Option value="female">female</Option>
@@ -77,7 +76,7 @@ const CreateContact = ({ onCancelClick }) => {
 
             <Form.Item name="emergency" hidden={!switchEmergency} label="Phone Number">
                 <Input />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item>
                 <Space>
