@@ -2,16 +2,18 @@ import React, { useContext, useState, useEffect } from "react";
 import { Table, Space, Button, Divider } from "antd";
 import { ContactContext } from "../Context/ContactContext";
 import EditContact from "./EditContact";
+import moment from "moment";
 
 const ContactList = ({ onAddNewClick }) => {
     const [contacts, setContacts] = useContext(ContactContext);
     const [modalValue, setModal] = useState(false);
     const [currentRecord, setCurrentRecord] = useState({});
-    const [mount, setMounted] = useState(false);
+    // const [mount, setMounted] = useState(false);
 
     useEffect(() => {
         let storageContacts = JSON.parse(localStorage.getItem("contacts"));
         if (storageContacts) {
+            storageContacts.birthDay = moment(storageContacts.birthDay).format("DD/MM/YYYY");
             setContacts(storageContacts);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,21 +47,21 @@ const ContactList = ({ onAddNewClick }) => {
             dataIndex: "phone",
             key: "phone"
         },
-        // {
-        //     title: "Birth Day",
-        //     dataIndex: "birthDay",
-        //     key: "birthDay"
-        // },
-        // {
-        //     title: "Gender",
-        //     dataIndex: "gender",
-        //     key: "gender"
-        // },
-        // {
-        //     title: "Emergency Contacts (optional)",
-        //     dataIndex: "emergency",
-        //     key: "emergency"
-        // },
+        {
+            title: "Birth Day",
+            dataIndex: "birthDay",
+            key: "birthDay"
+        },
+        {
+            title: "Gender",
+            dataIndex: "gender",
+            key: "gender"
+        },
+        {
+            title: "Emergency Contacts (optional)",
+            dataIndex: "emergency",
+            key: "emergency"
+        },
         {
             title: "Action",
             key: "action",

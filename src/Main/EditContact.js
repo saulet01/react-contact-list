@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
-import { Modal, Button, Form, Space, Input, message } from "antd";
+import { Modal, Button, Form, Space, Input, message, Select, Switch, DatePicker } from "antd";
 import { ContactContext } from "../Context/ContactContext";
+import moment from "moment";
+const { Option } = Select;
 
 const EditContact = props => {
     const [contacts, setContacts] = useContext(ContactContext);
@@ -9,7 +11,7 @@ const EditContact = props => {
     const handleSubmit = values => {
         const copyContacts = [...contacts];
         const indexContact = copyContacts.findIndex(item => item.name === props.record.name && item.phone && props.record.phone);
-
+        values.birthDay = values.birthDay.format("DD/MM/YYYY");
         copyContacts[indexContact] = values;
         localStorage.setItem("contacts", JSON.stringify(copyContacts));
         setContacts(copyContacts);
@@ -23,7 +25,7 @@ const EditContact = props => {
 
     // useEffect(() => {}, [props.modal]);
 
-    const { name, phone } = props.record;
+    const { name, phone, birthDay, emergency, gender } = props.record;
 
     return (
         <>
@@ -70,35 +72,36 @@ const EditContact = props => {
                         <Input />
                     </Form.Item>
 
-                    {/* <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
-                <Select placeholder="Select a option and change input text above" allowClear>
-                    <Option value="male">male</Option>
-                    <Option value="female">female</Option>
-                    <Option value="other">other</Option>
-                </Select>
-            </Form.Item>
+                    <Form.Item name="gender" label="Gender" rules={[{ required: true }]} initialValue={gender}>
+                        <Select placeholder="Select a option and change input text above" allowClear>
+                            <Option value="male">male</Option>
+                            <Option value="female">female</Option>
+                            <Option value="other">other</Option>
+                        </Select>
+                    </Form.Item>
 
-            <Form.Item
-                name="birthDay"
-                label="Birth Day"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please pick your birth day on the calendar"
-                    }
-                ]}
-            >
-                <DatePicker />
-            </Form.Item>
+                    <Form.Item
+                        name="birthDay"
+                        label="Birth Day"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please pick your birth day on the calendar"
+                            }
+                        ]}
+                        initialValue={moment(birthDay, "DD/MM/YYYY")}
+                    >
+                        <DatePicker />
+                    </Form.Item>
 
-            <div style={{ marginBottom: "20px" }}>
-                <span>Emergency Contacts (optional):</span>
-                <Switch onChange={handleSwitch} checked={switchEmergency} />
-            </div>
+                    {/* <div style={{ marginBottom: "20px" }}>
+                        <span>Emergency Contacts (optional):</span>
+                        <Switch onChange={handleSwitch} checked={switchEmergency} />
+                    </div>
 
-            <Form.Item name="emergency" hidden={!switchEmergency} label="Phone Number">
-                <Input />
-            </Form.Item> */}
+                    <Form.Item name="emergency" hidden={!switchEmergency} label="Phone Number">
+                        <Input />
+                    </Form.Item> */}
                 </Modal>
             </Form>
         </>
