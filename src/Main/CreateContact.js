@@ -1,19 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Form, Input, Button, Space, DatePicker, Select, Switch, message } from "antd";
-import { ContactContext } from "../Context/ContactContext";
+import { useContacts } from "../CustomHooks/useContacts";
 const { Option } = Select;
 
 const CreateContact = ({ onCancelClick }) => {
     const [form] = Form.useForm();
-    const [contacts, setContacts] = useContext(ContactContext);
     const [switchEmergency, setSwitchEmergency] = useState(false);
+    const { createContact } = useContacts();
 
     const onFormFinish = values => {
-        values.birthDay = values.birthDay.format("DD/MM/YYYY");
-        setContacts(prevContacts => {
-            localStorage.setItem("contacts", JSON.stringify([...prevContacts, values]));
-            return [...prevContacts, values];
-        });
+        createContact(values);
         message.success("Contact was successfully added");
         onCancelClick();
     };

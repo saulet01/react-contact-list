@@ -1,14 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Table, Space, Button, Divider } from "antd";
-import { ContactContext } from "../Context/ContactContext";
 import EditContact from "./EditContact";
+import { ContactContext } from "../Context/ContactContext";
+import { useContacts } from "../CustomHooks/useContacts";
 import moment from "moment";
 
 const ContactList = ({ onAddNewClick }) => {
     const [contacts, setContacts] = useContext(ContactContext);
     const [modalValue, setModal] = useState(false);
     const [currentRecord, setCurrentRecord] = useState({});
-    // const [mount, setMounted] = useState(false);
+    const { deleteContact } = useContacts();
 
     useEffect(() => {
         let storageContacts = JSON.parse(localStorage.getItem("contacts"));
@@ -29,11 +30,7 @@ const ContactList = ({ onAddNewClick }) => {
     };
 
     const deleteHandler = record => {
-        let copyContacts = [...contacts];
-        const findIndex = copyContacts.findIndex(item => item.name === record.name && item.phone && record.phone);
-        copyContacts.splice(findIndex, 1);
-        localStorage.setItem("contacts", JSON.stringify(copyContacts));
-        setContacts(copyContacts);
+        deleteContact(record);
     };
 
     const columns = [

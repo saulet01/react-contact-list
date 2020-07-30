@@ -2,19 +2,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form, Space, Input, message, Select, Switch, DatePicker } from "antd";
 import { ContactContext } from "../Context/ContactContext";
+import { useContacts } from "../CustomHooks/useContacts";
 import moment from "moment";
 const { Option } = Select;
 
 const EditContact = props => {
     const [contacts, setContacts] = useContext(ContactContext);
+    const { updateContact } = useContacts();
 
     const handleSubmit = values => {
-        const copyContacts = [...contacts];
-        const indexContact = copyContacts.findIndex(item => item.name === props.record.name && item.phone && props.record.phone);
-        values.birthDay = values.birthDay.format("DD/MM/YYYY");
-        copyContacts[indexContact] = values;
-        localStorage.setItem("contacts", JSON.stringify(copyContacts));
-        setContacts(copyContacts);
+        updateContact(values, props.record);
         message.success("Updated Successfully!");
         handleCancel();
     };
